@@ -7,9 +7,9 @@ using System.Runtime.Caching;
 using MyShop.Core;
 using MyShop.Core.Models;
 
-namespace MyShop.DataAcess.InMemory
+namespace MyShop.DataAccess.InMemory
 {
-    class ProductRepository
+    public class ProductRepository
     {
         ObjectCache cache = MemoryCache.Default;
         List<Product> products;
