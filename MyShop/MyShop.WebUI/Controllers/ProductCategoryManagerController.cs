@@ -4,23 +4,23 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyShop.Core.Models;
-using MyShop.DataAccess.InMemory;
+using MyShop.DataAcess.InMemory;
 
 namespace MyShop.WebUI.Controllers
 {
-    public class ProductManagementController : Controller
+    public class ProductCategoryManagerController : Controller
     {
-        ProductRepository repository;
+        ProductCategoryRepository repository;
 
-        public ProductManagementController()
+        public ProductCategoryManagerController()
         {
-            repository = new ProductRepository();
+            repository = new ProductCategoryRepository();
         }
         // GET: ProductManagement
         public ActionResult Index()
         {
-            List<Product> products = repository.Collection().ToList();
-            return View(products);
+            List<ProductCategory> productCategories = repository.Collection().ToList();
+            return View(productCategories);
         }
 
         public ActionResult Create()
@@ -28,14 +28,15 @@ namespace MyShop.WebUI.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(ProductCategory productCategory)
         {
             if (!ModelState.IsValid)
             {
-                return View(product);
-            } else
+                return View(productCategory);
+            }
+            else
             {
-                repository.Insert(product);
+                repository.Insert(productCategory);
                 repository.Commit();
                 return RedirectToAction("Index");
             }
@@ -43,37 +44,36 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult Edit(string Id)
         {
-            Product productToEdit = repository.Find(Id);
-            if(productToEdit != null)
+            ProductCategory productCategoryToEdit = repository.Find(Id);
+            if (productCategoryToEdit != null)
             {
-                return View(productToEdit);
-            } else
+                return View(productCategoryToEdit);
+            }
+            else
             {
                 return HttpNotFound();
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, string Id)
+        public ActionResult Edit(ProductCategory product, string Id)
         {
-            Product productToEdit = repository.Find(Id);
-            if(productToEdit != null)
+            ProductCategory productCategoryToEdit = repository.Find(Id);
+            if (productCategoryToEdit != null)
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return View(product);
-                } else
+                }
+                else
                 {
-                    productToEdit.Category = product.Category;
-                    productToEdit.Description = product.Description;
-                    productToEdit.Name = product.Name;
-                    productToEdit.Image = product.Image;
-                    productToEdit.Price = product.Price;
+                    productCategoryToEdit.Category = product.Category;
 
                     repository.Commit();
                     return RedirectToAction("Index");
                 }
-            } else
+            }
+            else
             {
                 return HttpNotFound();
             }
@@ -81,10 +81,10 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult Delete(string Id)
         {
-            Product productToDelete = repository.Find(Id);
-            if (productToDelete != null)
+            ProductCategory productCategoryToDelete = repository.Find(Id);
+            if (productCategoryToDelete != null)
             {
-                return View(productToDelete);
+                return View(productCategoryToDelete);
             }
             else
             {
@@ -96,10 +96,10 @@ namespace MyShop.WebUI.Controllers
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(string Id)
         {
-            Product productToDelete = repository.Find(Id);
-            if (productToDelete != null)
+            ProductCategory productCategoryToDelete = repository.Find(Id);
+            if (productCategoryToDelete != null)
             {
-                repository.Delete(Id);    
+                repository.Delete(Id);
                 repository.Commit();
                 return RedirectToAction("Index");
             }
