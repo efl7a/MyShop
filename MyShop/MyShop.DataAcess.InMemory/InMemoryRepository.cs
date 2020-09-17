@@ -30,9 +30,9 @@ namespace MyShop.DataAcess.InMemory
             cache[className] = items;
         }
 
-        public void Insert(T p)
+        public void Insert(T item)
         {
-            items.Add(p);
+            items.Add(item);
         }
 
         public void Update(T item)
