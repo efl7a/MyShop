@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -36,13 +37,18 @@ namespace MyShop.WebUI.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
                 return View(product);
             } else
             {
+                if (file != null)
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);
+                }
                 repository.Insert(product);
                 repository.Commit();
                 return RedirectToAction("Index");
@@ -65,7 +71,7 @@ namespace MyShop.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, string Id)
+        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file)
         {
             Product productToEdit = repository.Find(Id);
             if(productToEdit != null)
@@ -78,8 +84,13 @@ namespace MyShop.WebUI.Controllers
                     productToEdit.Category = product.Category;
                     productToEdit.Description = product.Description;
                     productToEdit.Name = product.Name;
-                    productToEdit.Image = product.Image;
                     productToEdit.Price = product.Price;
+
+                    if (file != null)
+                    {
+                        productToEdit.Image = product.Id + Path.GetExtension(file.FileName);
+                        file.SaveAs(Server.MapPath("//Content//ProductImages//") + productToEdit.Image);
+                    }
 
                     repository.Commit();
                     return RedirectToAction("Index");
