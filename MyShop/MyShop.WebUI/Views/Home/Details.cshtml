@@ -18,7 +18,7 @@
         @Html.DisplayNameFor(model => model.Price)
         $@Html.DisplayFor(model => model.Price)
     </div>
-    
+    <div><a href="@Url.Action("AddToBasket", "Basket", new { Id = Model.Id })" class="btn btn-default">Add to Cart</a></div>
 
 
 </div>
